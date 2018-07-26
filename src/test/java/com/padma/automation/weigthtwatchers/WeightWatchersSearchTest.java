@@ -11,42 +11,40 @@ public class WeightWatchersSearchTest extends BaseTestCase {
 	
 	
 	@Test
-	public void search() throws InterruptedException{
+	public void findAMeeting() throws InterruptedException{
 		String Url="https://www.weightwatchers.com/us/";
 		
 		if(driver==null){
 			driver = new ChromeDriver();
 		}
-		WeigthWatchersHomePage page= new WeigthWatchersHomePage(driver,Url);
+		WeigthWatchersHomePage homepage= new WeigthWatchersHomePage(driver,Url);
 		String ActualText = driver.getTitle();
 		String ExpectedText="Weight Loss Program, Recipes & Help | Weight Watchers";
-		Assert.assertEquals(ActualText, ExpectedText);
+		Assert.assertEquals(ActualText, ExpectedText, "Page titles not matches.");
 		
-		page.FindAMeeting.click();
+		homepage.FindAMeeting.click();
 		String ActualTitle=driver.getTitle();
-		String ExpectedTitle="Get Schedules & Times Near You";
-	//	Assert.assertEquals(ActualTitle, ExpectedTitle);
+	    Assert.assertTrue(ActualTitle.contains("Get Schedules & Times Near You"), "Page title not contains 'Get Schedules & Times Near You'");
+	    
+	    homepage.SearchBox.click();
+	    homepage.SearchBox.sendKeys("10011");
+	    homepage.SearchButton.click();
 		
-		
-		page.SearchBox.click();
-		page.SearchBox.sendKeys("10011");
-		page.SearchButton.click();
-		
-	    Thread.sleep(2000);
+	    homepage.waitForPageLoad();
 		System.out.println("Search result Title :"+driver.getTitle());
 		
-		String FirstResultName = page.firstResultName.getText();
+		String FirstResultName = homepage.firstResultName.getText();
 		System.out.println("First result: "+FirstResultName);
-	    String FirstResultDistance= page.firstResultDistance.getText();
+		
+	    String FirstResultDistance= homepage.firstResultDistance.getText();
 	    System.out.println("First result Distance : "+FirstResultDistance);
 	    
-	    page.firstResultName.click();
-	    System.out.println( driver.getTitle());
-	    
-	    String ResultDetailPageName = page.firstResultDetailName.getText();
+	    homepage.firstResultName.click();
+	 	    
+	    String ResultDetailPageName = homepage.firstResultDetailName.getText();
 	    Assert.assertEquals(FirstResultName, ResultDetailPageName);
 	    
-	    System.out.println(page.HousOfOperation.getText());
+	    System.out.println("TODAY’s hours of operation :- "+homepage.HousOfOperation.getText());
 	   
 	    
 	    
